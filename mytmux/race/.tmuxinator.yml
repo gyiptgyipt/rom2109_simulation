@@ -28,4 +28,4 @@ windows:
   - Rviz: 
       root: ~/
       panes:
-        - clear; source ~/.bashrc; #sleep 10; ros2 run rom2109_race steering_run
+        - clear; source ~/.bashrc; sleep 10; ros2 run rom2109_race steering_run

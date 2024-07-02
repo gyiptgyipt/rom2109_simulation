@@ -41,8 +41,8 @@ namespace rom_dynamics
     scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>(
     "input_scan", rclcpp::SensorDataQoS(), std::bind(&AvoidanceNode::scan_callback, this, _1));
 
-    //timer_ = create_wall_timer(50ms, std::bind(&AvoidanceNode::control_cycle, this));
-    timer_ = create_wall_timer(50ms, std::bind(&AvoidanceNode::my_control_cycle, this));
+    timer_ = create_wall_timer(50ms, std::bind(&AvoidanceNode::control_cycle, this));
+    //timer_ = create_wall_timer(50ms, std::bind(&AvoidanceNode::my_control_cycle, this));
   }
 
   void
