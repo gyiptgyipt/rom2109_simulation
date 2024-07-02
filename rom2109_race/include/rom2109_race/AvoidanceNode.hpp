@@ -43,9 +43,12 @@ public:
 
   void scan_callback(sensor_msgs::msg::LaserScan::UniquePtr msg);
   void control_cycle();
+  void my_control_cycle();
 
 protected:
   VFFVectors get_vff(const sensor_msgs::msg::LaserScan & scan);
+  VFFVectors my_get_vff(sensor_msgs::msg::LaserScan & scan);
+
 
   visualization_msgs::msg::MarkerArray get_debug_vff(const VFFVectors & vff_vectors);
   visualization_msgs::msg::Marker make_marker(

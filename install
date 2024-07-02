@@ -30,6 +30,12 @@ echo "OK"
 echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
 echo "Exporting rmw_cyclonedds_cpp : OK "
 
+echo "#export ROM_GZ_WORLD=rom_maze_1.world" >> ~/.bashrc
+echo "#export ROM_GZ_WORLD=rom_maze_4.world" >> ~/.bashrc
+echo "#export ROM_GZ_WORLD=balls.world" >> ~/.bashrc
+echo "#export ROM_GZ_WORLD=single_square.world" >> ~/.bashrc
+echo "#export ROM_GZ_WORLD=f1_race.world" >> ~/.bashrc
+
 git clone git@github.com:ROM-robotics/tmux_install.git
 #cd tumx_install
 #./start.sh
@@ -37,3 +43,6 @@ echo "Cloning ROM-robotics/tmux_install.git"
 
 cp ./.tmuxinator.yml ./autostart.sh $HOME/
 echo "Copying .tmuxinator.yaml, autostart.sh to $HOME "
+
+cp ./.tmux.conf $HOME/
+echo "Copying .tmux.conf, autostart.sh to $HOME "

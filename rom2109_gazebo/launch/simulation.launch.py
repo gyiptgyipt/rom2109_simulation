@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import sys
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
@@ -14,7 +15,9 @@ def generate_launch_description():
     gazebo_pkg = get_package_share_directory('rom2109_gazebo')
     #joy_pkg = get_package_share_directory('rom_robotics_joy')
     description_pkg = get_package_share_directory('rom2109_description')
-    default_world_path = os.path.join(gazebo_pkg, 'worlds', 'f1_race.world')
+
+    rom_world = os.environ.get('ROM_GZ_WORLD', 'rom_maze_1.world')
+    default_world_path = os.path.join(gazebo_pkg, 'worlds', rom_world)
 
     urdf_file = os.path.join(description_pkg,'urdf', 'lidarbot.urdf')
     # robot_description_config = xacro.process_file(xacro_file)

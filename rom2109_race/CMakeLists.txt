@@ -38,18 +38,22 @@ include_directories(
 add_executable(linear_run src/linear.cpp src/rom_aeb.cpp)
 ament_target_dependencies(linear_run rclcpp geometry_msgs nav_msgs sensor_msgs std_msgs)
 
+add_executable(steering_run src/steering.cpp)
+ament_target_dependencies(steering_run rclcpp geometry_msgs nav_msgs sensor_msgs std_msgs)
+
 add_executable(avoidance_vff src/AvoidanceMain.cpp src/AvoidanceNode.cpp)
 ament_target_dependencies(avoidance_vff rclcpp visualization_msgs geometry_msgs nav_msgs sensor_msgs std_msgs)
 
 # Install Cpp executables
 install(TARGETS
+  steering_run
   linear_run
   avoidance_vff
   DESTINATION lib/${PROJECT_NAME})
 
 install(
   DIRECTORY
-    worlds
+    rviz
   DESTINATION
     share/${PROJECT_NAME}/
 )
