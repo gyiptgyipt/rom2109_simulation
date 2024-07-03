@@ -24,13 +24,12 @@ echo "#export ROM_GZ_WORLD=balls.world" >> ~/.bashrc
 echo "#export ROM_GZ_WORLD=single_square.world" >> ~/.bashrc
 echo "#export ROM_GZ_WORLD=f1_race.world" >> ~/.bashrc
 
-git clone git@github.com:ROM-robotics/tmux_install.git
-#cd tumx_install
-#./start.sh
-echo "Cloning ROM-robotics/tmux_install.git"
+echo "#ROM_ROBOT_MODEL=yoyo" >> ~/.bashrc
+echo "#ROM_ROBOT_MODEL=rom2109" >> ~/.bashrc
 
-cp ./.tmuxinator.yml ./autostart.sh $HOME/
-echo "Copying .tmuxinator.yaml, autostart.sh to $HOME "
+echo "Installing tmux, tmuxinator"
+sudo apt install tmux tmuxinator -y
 
-cp ./.tmux.conf $HOME/
-echo "Copying .tmux.conf, autostart.sh to $HOME "
+
+cp ./.tmuxinator.yml ./autostart.sh ./.tmux.conf $HOME/
+echo "Copying .tmux.conf , .tmuxinator.yaml, autostart.sh to $HOME "
