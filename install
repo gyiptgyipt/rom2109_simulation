@@ -23,8 +23,8 @@ echo "#export ROM_GZ_WORLD=rom_maze_4.world" >> ~/.bashrc
 echo "#export ROM_GZ_WORLD=balls.world" >> ~/.bashrc
 echo "#export ROM_GZ_WORLD=single_square.world" >> ~/.bashrc
 echo "#export ROM_GZ_WORLD=f1_race.world" >> ~/.bashrc
-
-echo "#ROM_ROBOT_MODEL=yoyo" >> ~/.bashrc
+echo "" >> ~/.bashrc
+echo "ROM_ROBOT_MODEL=yoyo" >> ~/.bashrc
 echo "#ROM_ROBOT_MODEL=rom2109" >> ~/.bashrc
 
 echo "Installing tmux, tmuxinator"
@@ -33,3 +33,9 @@ sudo apt install tmux tmuxinator -y
 
 cp ./.tmuxinator.yml ./autostart.sh ./.tmux.conf $HOME/
 echo "Copying .tmux.conf , .tmuxinator.yaml, autostart.sh to $HOME "
+
+echo "alias bb='colcon build --symlink-install && source install/setup.bash'" >> ~/.bashrc
+echo "alias delete_workspace='rm -rf build install log;'" >> ~/.bashrc
+
+echo "export ROS_DOMAIN_ID=88" >> ~/.bashrc
+echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
