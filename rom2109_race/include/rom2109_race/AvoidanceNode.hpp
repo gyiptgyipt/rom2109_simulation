@@ -45,7 +45,7 @@ public:
   void control_cycle();
 
 protected:
-  VFFVectors get_vff(const sensor_msgs::msg::LaserScan & scan);
+  VFFVectors get_vff(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 
   visualization_msgs::msg::MarkerArray get_debug_vff(const VFFVectors & vff_vectors);
   visualization_msgs::msg::Marker make_marker(
@@ -57,7 +57,7 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
 
-  sensor_msgs::msg::LaserScan::UniquePtr last_scan_;
+  sensor_msgs::msg::LaserScan::SharedPtr last_scan_;
 };
 
 }  // namespace rom_dynamics

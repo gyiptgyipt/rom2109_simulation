@@ -59,7 +59,7 @@ AvoidanceNode::control_cycle()
   }
 
   // Get VFF vectors
-  const VFFVectors & vff = get_vff(*last_scan_);
+  const VFFVectors & vff = get_vff(last_scan_);
 
   // Use result vector to calculate output speed
   const auto & v = vff.result;
@@ -69,9 +69,11 @@ AvoidanceNode::control_cycle()
   // Create ouput message, controlling speed limits
   geometry_msgs::msg::Twist vel;
   
-  vel.linear.x = std::clamp(module, 0.0, 0.3);  // truncate linear vel to [0.0, 0.3] m/s
+  vel.linear.x = std::clamp(module, 0.0, 0.4);  // truncate linear vel to [0.0, 0.3] m/s
+   RCLCPP_INFO(rclcpp::get_logger("\033[1;34linear_vel\033[1;0m"), ": \033[1;34m%.4f mps\033[1;0m", vel.linear.x);
 
   vel.angular.z = std::clamp(angle, -0.5, 0.5);  // truncate rotation vel to [-0.5, 0.5] rad/s
+   RCLCPP_INFO(rclcpp::get_logger("\033[1;36mangular\033[1;0m"), ": \033[1;36m%.4f mps\033[1;0m", vel.angular.z);
 
   vel_pub_->publish(vel);
 
@@ -82,7 +84,7 @@ AvoidanceNode::control_cycle()
 }
 
 VFFVectors
-AvoidanceNode::get_vff(const sensor_msgs::msg::LaserScan & scan)
+AvoidanceNode::get_vff(const sensor_msgs::msg::LaserScan::SharedPtr scan)
 {
   // This is the obstacle radious in which an obstacle affects the robot
   const float OBSTACLE_DISTANCE = 1.0;
@@ -93,15 +95,32 @@ AvoidanceNode::get_vff(const sensor_msgs::msg::LaserScan & scan)
   vff_vector.repulsive = {0.0, 0.0};
   vff_vector.result = {0.0, 0.0};
 
+  auto const adjust_range_scan = std::make_shared<sensor_msgs::msg::LaserScan>(*scan);
+  adjust_range_scan->ranges.clear();
+
+  double current_angle_range = scan->angle_min;
+  for (const auto &range : scan->ranges)
+        {
+            if (range > 0.2 )
+            {
+                adjust_range_scan->ranges.push_back(range);
+            }
+            else
+            {
+                adjust_range_scan->ranges.push_back(std::numeric_limits<double>::infinity());
+            }
+           
+        }
+
   // Get the index of nearest obstacle
-  int min_idx = std::min_element(scan.ranges.begin(), scan.ranges.end()) - scan.ranges.begin();
+  int min_idx = std::min_element(adjust_range_scan->ranges.begin(), adjust_range_scan->ranges.end()) - adjust_range_scan->ranges.begin();
 
   // Get the distance to nearest obstacle
-  float distance_min = scan.ranges[min_idx];
+  float distance_min = adjust_range_scan->ranges[min_idx];    // MAY BE RIGHT HERE
 
   // If the obstacle is in the area that affects the robot, calculate repulsive vector
   if (distance_min < OBSTACLE_DISTANCE) {
-    float angle = scan.angle_min + scan.angle_increment * min_idx;
+    float angle = adjust_range_scan->angle_min + adjust_range_scan->angle_increment * min_idx;
 
     float oposite_angle = angle + M_PI;
     // The module of the vector is inverse to the distance to the obstacle

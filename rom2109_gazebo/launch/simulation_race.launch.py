@@ -58,11 +58,12 @@ def generate_launch_description():
         package='gazebo_ros',
         executable='spawn_entity.py',
         # arguments=['-database', 'rom2109_tall_ros', '-entity', 'rom2109_tall_ros',
-        arguments=['-file', urdf_file, '-entity', 'rom2109_tall_psa',
-                   "-x", '0.0',
-                   "-y", '0.0',
-                   "-z", '0.3'],
-        output='screen'
+        #arguments=['-file', urdf_file, '-entity', 'rom2109_tall_psa',
+        arguments=['-topic','/robot_description','-entity','rom2109_tall',
+            "-x", '0.0',
+            "-y", '0.0',
+            "-z", '0.3'],
+            output='screen'
     )
     
     """ joystick_launch = IncludeLaunchDescription(
