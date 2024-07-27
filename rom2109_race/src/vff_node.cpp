@@ -22,7 +22,7 @@
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
-#include "rom2109_race/AvoidanceNode.hpp"
+#include "rom2109_race/vff.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -69,10 +69,10 @@ AvoidanceNode::control_cycle()
   // Create ouput message, controlling speed limits
   geometry_msgs::msg::Twist vel;
   
-  vel.linear.x = std::clamp(module, 0.0, 0.4);  // truncate linear vel to [0.0, 0.3] m/s
+  vel.linear.x = std::clamp(module, 0.0, 0.5);  // truncate linear vel to [0.0, 0.3] m/s
    RCLCPP_INFO(rclcpp::get_logger("\033[1;34linear_vel\033[1;0m"), ": \033[1;34m%.4f mps\033[1;0m", vel.linear.x);
 
-  vel.angular.z = std::clamp(angle, -0.5, 0.5);  // truncate rotation vel to [-0.5, 0.5] rad/s
+  vel.angular.z = std::clamp(angle, -0.8, 0.8);  // truncate rotation vel to [-0.5, 0.5] rad/s
    RCLCPP_INFO(rclcpp::get_logger("\033[1;36mangular\033[1;0m"), ": \033[1;36m%.4f mps\033[1;0m", vel.angular.z);
 
   vel_pub_->publish(vel);
@@ -116,20 +116,27 @@ AvoidanceNode::get_vff(const sensor_msgs::msg::LaserScan::SharedPtr scan)
   int min_idx = std::min_element(adjust_range_scan->ranges.begin(), adjust_range_scan->ranges.end()) - adjust_range_scan->ranges.begin();
 
   // Get the distance to nearest obstacle 
-  float distance_min = adjust_range_scan->ranges[min_idx];    // MAY BE RIGHT HERE
+  float distance_min = adjust_range_scan->ranges[min_idx];   
 
   // If the obstacle is in the area that affects the robot, calculate repulsive vector
   if (distance_min < OBSTACLE_DISTANCE) {
     float angle = adjust_range_scan->angle_min + adjust_range_scan->angle_increment * min_idx;
 
-    float oposite_angle = angle + M_PI;
+    // float oposite_angle = angle + M_PI;
+
     // The module of the vector is inverse to the distance to the obstacle
     float complementary_dist = OBSTACLE_DISTANCE - distance_min;
 
+    if (angle < 0) {
     // Get cartesian (x, y) components from polar (angle, distance)
-    vff_vector.repulsive[0] = cos(oposite_angle) * complementary_dist;
-    vff_vector.repulsive[1] = sin(oposite_angle) * complementary_dist;
-
+    vff_vector.repulsive[0] = cos(M_PI/2.0) * complementary_dist;
+    vff_vector.repulsive[1] = sin(M_PI/2.0) * complementary_dist;
+    }
+    if (angle > 0 ){
+    // Get cartesian (x, y) components from polar (angle, distance)
+    vff_vector.repulsive[0] = cos(M_PI + M_PI/2.0) * complementary_dist;
+    vff_vector.repulsive[1] = sin(M_PI + M_PI/2.0) * complementary_dist;
+    }
     // ROS_INFO
   }
 

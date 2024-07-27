@@ -41,11 +41,14 @@ ament_target_dependencies(linear_run rclcpp geometry_msgs nav_msgs sensor_msgs s
 add_executable(avoidance_vff src/AvoidanceMain.cpp src/AvoidanceNode.cpp)
 ament_target_dependencies(avoidance_vff rclcpp visualization_msgs geometry_msgs nav_msgs sensor_msgs std_msgs)
 
+add_executable(vff_node src/vff_node.cpp src/vff_main.cpp)
+ament_target_dependencies(vff_node rclcpp visualization_msgs geometry_msgs nav_msgs sensor_msgs std_msgs)
 
 # Install Cpp executables
 install(TARGETS
   linear_run
   avoidance_vff
+  vff_node
 
   DESTINATION lib/${PROJECT_NAME})
 

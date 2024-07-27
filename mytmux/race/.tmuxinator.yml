@@ -20,7 +20,8 @@ windows:
   - VFF: 
       root: ~/
       panes:
-        - clear; source ~/.bashrc; ros2 run rom2109_race avoidance_vff --ros-args -r input_scan:=/scan -r output_vel:=/cmd_vel_vff -p use_sim_time:=true
+        - clear; source ~/.bashrc; ros2 run rom2109_race vff_node --ros-args -r input_scan:=/scan -r output_vel:=/cmd_vel_vff -p use_sim_time:=true
+        #- clear; source ~/.bashrc; ros2 run rom2109_race avoidance_vff --ros-args -r input_scan:=/scan -r output_vel:=/cmd_vel_vff -p use_sim_time:=true
   # - Key: 
   #     root: ~/
   #     panes:
